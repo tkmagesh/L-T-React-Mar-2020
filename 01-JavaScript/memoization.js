@@ -101,7 +101,24 @@ var isPrime = memoize(function process(n) {
     return true;
 });
 
+
+
 var isOddOrEven = memoize(function process(n) {
     console.log('processing ', n);
     return n % 2 === 0 ? 'even' : 'odd';
 });
+
+function memoize(process) {
+    var cache = {};
+    return function () {
+        var key = JSON.stringify(arguments);
+        if (typeof cache[key] === 'undefined')
+            cache[key] = process.apply(this, arguments);
+        return cache[key];
+    }
+}
+
+var add = memoize(function (x, y) {
+    console.log('processing ', x , ', ' , y);
+    return x + y;
+})
