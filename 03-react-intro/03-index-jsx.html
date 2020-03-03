@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>React Intro</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="babel.min.js"></script>
+
+    <script type="text/babel">
+        window.addEventListener('load', onLoad);
+        function onLoad(){
+            var btnRender = document.getElementById('btnRender');
+            btnRender.addEventListener('click', onBtnRenderClick);
+        }
+
+        var counter = 0;
+        function onBtnRenderClick(){
+            ++counter;
+            var counterEle = (
+                <div>
+                    <span> Counter : </span>
+                    <span>{counter}</span>
+                </div>
+            );
+
+            var sec1 = (
+                 <section>
+                    <h3>Advantages</h3>
+                    <ol>
+                        <li>Declarative</li>
+                        <li>Efficient</li>
+                    </ol>
+                </section>
+            );
+            var appEle = (
+                <div>
+                    <h1>Welcome to React.js!</h1>
+                    <hr/>
+                        {counterEle}
+                        <section>
+                            <h3>Introduction</h3>
+                            <p>Amet sint qui deserunt consequat est Lorem minim nisi veniam. Commodo nostrud veniam velit sunt enim dolor nulla duis. Velit minim proident veniam cillum aliquip velit eiusmod pariatur laborum amet ut nostrud.</p>
+                            <p>Labore culpa amet qui pariatur laboris esse commodo commodo duis non. Laboris esse magna adipisicing aliqua ad excepteur excepteur aliquip reprehenderit aute reprehenderit. Fugiat magna enim veniam minim sunt cillum consectetur commodo nulla. Esse nisi non laboris veniam. Consequat quis incididunt proident ut ullamco mollit labore exercitation occaecat. Aliqua duis consectetur consectetur labore sit minim officia mollit et.</p>
+                            <p>Commodo magna cupidatat irure aute fugiat eiusmod laborum pariatur ut aute voluptate cupidatat ea elit. Mollit in ad enim ipsum reprehenderit ad veniam deserunt exercitation est proident fugiat Lorem. Anim dolor excepteur quis exercitation nostrud officia non nostrud reprehenderit incididunt. Laboris commodo ea fugiat cupidatat mollit mollit consectetur. Eu veniam irure eiusmod laborum et. Ipsum labore quis ullamco pariatur laboris voluptate ea officia tempor magna mollit laborum pariatur enim. Quis nulla voluptate in ad elit commodo in.</p>
+                        </section>
+                        {sec1}
+                </div>
+            );
+
+
+            ReactDOM.render(appEle, document.getElementById('root'))
+        }
+    </script>
+</head>
+<body>
+    <input type="button" value="Render" id="btnRender">
+    <div id="root"></div>
+</body>
+</html>
