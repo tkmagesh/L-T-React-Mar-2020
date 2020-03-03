@@ -1,0 +1,135 @@
+<!-- basic + hra + da - tax% -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Salary Calculator</title>
+    <style>
+        body{
+            margin-left: 50px;
+        }
+        .field{
+            margin-bottom: 10px;
+        }
+        label{
+            display: block;
+        }
+        td{
+            font-size: 18pt;
+            padding-right: 20px;
+        }
+    </style>
+    <script src="jquery-3.4.1.js"></script>
+    <script>
+        String.prototype.toInt = function(){
+            return parseInt(this, 10);
+        };
+
+        //Model = state + behavior
+        function SalaryCalculatorModel(){
+            //state
+            //this.basic = 0;
+            var _basic = 0;
+            this.onBasicChange = null;
+            this.getBasic = function(){
+                return _basic;
+            };
+            this.setBasic = function(value){
+                if (value === _basic) return;
+                _basic = value;
+                if (typeof this.onBasicChange === 'function')
+                    this.onBasicChange(_basic);
+            };
+
+            this.hra = 0;
+            this.da = 0;
+            this.tax = 0;
+            this.salary = 0;
+
+            this.onSalaryChange = null;
+        }
+        SalaryCalculatorModel.prototype.calculate = function(){
+            var gross = this.getBasic() + this.hra + this.da;
+            var net = gross * ((100-this.tax)/100);
+            this.salary = net;
+            if (typeof this.onSalaryChange === 'function')
+                this.onSalaryChange(this.salary);
+        }
+
+        //View
+        $(function(){
+            window['model'] = new SalaryCalculatorModel();
+
+            $('#txtBasic').keyup(function(){
+                model.setBasic($(this).val().toInt());
+            });
+
+            $('#txtHra').keyup(function(){
+                model.hra = $(this).val().toInt();
+            });
+
+            $('#txtDa').keyup(function(){
+                model.da = $(this).val().toInt();
+            });
+
+            $('#rangeTax').change(function(){
+                model.tax = $(this).val().toInt();
+            });
+
+
+            $('#btnCalculate').click(function(){
+                model.calculate();
+            });
+
+            model.onSalaryChange = function(value){
+                $('#tdSalary').text(value);
+            };
+            
+            model.onBasicChange = function(value){
+                $('#tdBasic').text(value);
+            }
+        });
+    
+    </script>
+</head>
+<body>
+    <h1>Salary Calculator</h1>
+    <hr>
+    <section>
+        <div class="field">
+            <label for="">Basic :</label>
+            <input type="number" name="" id="txtBasic">
+        </div>
+        <div class="field">
+            <label for="">HRA :</label>
+            <input type="number" name="" id="txtHra">
+        </div>
+        <div class="field">
+            <label for="">DA :</label>
+            <input type="number" name="" id="txtDa">
+        </div>
+        <div class="field">
+            <label for="">Tax :</label>
+            <input type="range" name="" id="rangeTax" min="0" max="30" value="0">
+        </div>
+        <div class="field">
+            <input type="button" value="Calculate" id="btnCalculate">
+        </div>
+        <div class="field">
+            <table>
+                <tbody>
+                    <tr>
+                        <td id="tdBasic">[basic]</td>
+                        <td id="tdHra">[hra]</td>
+                        <td id="tdDa">[da]</td>
+                        <td id="tdTax">[tax]</td>
+                        <td id="tdSalary">[Salary]</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>
+</html>
