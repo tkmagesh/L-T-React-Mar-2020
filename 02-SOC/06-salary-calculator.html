@@ -1,0 +1,158 @@
+<!-- basic + hra + da - tax% -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Salary Calculator</title>
+    <style>
+        body{
+            margin-left: 50px;
+        }
+        .field{
+            margin-bottom: 10px;
+        }
+        label{
+            display: block;
+        }
+        td{
+            font-size: 18pt;
+            padding-right: 20px;
+        }
+    </style>
+    <script src="jquery-3.4.1.js"></script>
+    <script>
+        String.prototype.toInt = function(){
+            return parseInt(this, 10);
+        };
+
+        //Model = state + behavior
+        function SalaryCalculatorModel(){
+            //state
+            var _data = {
+                basic : 0,
+                hra : 0,
+                da : 0,
+                tax : 0,
+                salary : 0
+            };
+
+            var _subscribers = {
+                basic : null,
+                hra : null,
+                da : null,
+                tax : null,
+                salary : null
+            };
+
+            this.subscribe = function(attrName, callbackFn){
+                _subscribers[attrName] = callbackFn;
+            };
+
+            this.get = function(attrName){
+                return _data[attrName];
+            };
+
+            this.set = function(attrName, value){
+                if (_data[attrName] === value) return;
+                _data[attrName] = value;
+                var callbackFn = _subscribers[attrName];
+                if (typeof callbackFn === 'function')
+                    callbackFn(_data[attrName]);
+            };
+        }
+        SalaryCalculatorModel.prototype.calculate = function(){
+            var gross = this.get('basic') + this.get('hra') + this.get('da');
+            var net = gross * ((100-this.get('tax'))/100);
+            this.set('salary', net);
+        }
+
+        //View
+        $(function(){
+            window['model'] = new SalaryCalculatorModel();
+
+            //Reacting to user actions
+            $('#txtBasic').keyup(function(){
+                model.set('basic' , $(this).val().toInt());
+            });
+
+            $('#txtHra').keyup(function(){
+                model.set('hra' , $(this).val().toInt());
+            });
+
+            $('#txtDa').keyup(function(){
+                model.set('da' , $(this).val().toInt());
+            });
+
+            $('#rangeTax').change(function(){
+                model.set('tax' , $(this).val().toInt());
+            });
+
+            $('#btnCalculate').click(function(){
+                model.calculate();
+            });
+
+            //Reacting to model changes
+            model.subscribe('salary', function(value){
+                $('#tdSalary').text(value);
+            });
+            
+            model.subscribe('basic', function(value){
+                $('#tdBasic').text(value);
+            });
+
+            model.subscribe('hra', function (value) {
+                $('#tdHra').text(value);
+            });
+
+            model.subscribe('da', function (value) {
+                $('#tdDa').text(value);
+            });
+
+            model.subscribe('tax', function (value) {
+                $('#tdTax').text(value);
+            });
+        });
+    
+    </script>
+</head>
+<body>
+    <h1>Salary Calculator</h1>
+    <hr>
+    <section>
+        <div class="field">
+            <label for="">Basic :</label>
+            <input type="number" name="" id="txtBasic">
+        </div>
+        <div class="field">
+            <label for="">HRA :</label>
+            <input type="number" name="" id="txtHra">
+        </div>
+        <div class="field">
+            <label for="">DA :</label>
+            <input type="number" name="" id="txtDa">
+        </div>
+        <div class="field">
+            <label for="">Tax :</label>
+            <input type="range" name="" id="rangeTax" min="0" max="30" value="0">
+        </div>
+        <div class="field">
+            <input type="button" value="Calculate" id="btnCalculate">
+        </div>
+        <div class="field">
+            <table>
+                <tbody>
+                    <tr>
+                        <td id="tdBasic">[basic]</td>
+                        <td id="tdHra">[hra]</td>
+                        <td id="tdDa">[da]</td>
+                        <td id="tdTax">[tax]</td>
+                        <td id="tdSalary">[Salary]</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>
+</html>
