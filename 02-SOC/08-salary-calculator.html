@@ -1,0 +1,182 @@
+<!-- basic + hra + da - tax% -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Salary Calculator</title>
+    <style>
+        body{
+            margin-left: 50px;
+        }
+        .field{
+            margin-bottom: 10px;
+        }
+        label{
+            display: block;
+        }
+        td{
+            font-size: 18pt;
+            padding-right: 20px;
+        }
+    </style>
+    <script src="jquery-3.4.1.js"></script>
+    <script>
+        String.prototype.toInt = function(){
+            return parseInt(this, 10);
+        };
+
+        //Model = state + behavior
+        function SalaryCalculatorModel(){
+            //state
+            var _data = {
+                basic : 0,
+                hra : 0,
+                da : 0,
+                tax : 0,
+                salary : 0
+            };
+
+            var _subscribers = {
+                basic : [],
+                hra : [],
+                da : [],
+                tax : [],
+                salary : []
+            };
+
+            this.subscribe = function(attrName, callbackFn){
+                _subscribers[attrName].push(callbackFn);
+            };
+
+            this.get = function(attrName){
+                return _data[attrName];
+            };
+
+            this.set = function(attrName, value){
+                if (_data[attrName] === value) return;
+                _data[attrName] = value;
+                var callbackFns = _subscribers[attrName];
+                callbackFns.forEach(function(callbackFn){
+                    if (typeof callbackFn === 'function')
+                        callbackFn(_data[attrName]);
+                });
+            };
+        }
+        SalaryCalculatorModel.prototype.calculate = function(){
+            var gross = this.get('basic') + this.get('hra') + this.get('da');
+            var net = gross * ((100-this.get('tax'))/100);
+            this.set('salary', net);
+        }
+
+        //View
+        function SalaryCalculator(model){
+
+            var _template = `
+                <section>
+                    <div class="field">
+                        <label for="">Basic :</label>
+                        <input type="number" name="" id="txtBasic">
+                    </div>
+                    <div class="field">
+                        <label for="">HRA :</label>
+                        <input type="number" name="" id="txtHra">
+                    </div>
+                    <div class="field">
+                        <label for="">DA :</label>
+                        <input type="number" name="" id="txtDa">
+                    </div>
+                    <div class="field">
+                        <label for="">Tax :</label>
+                        <input type="range" name="" id="rangeTax" min="0" max="30" value="0">
+                    </div>
+                    <div class="field">
+                        <input type="button" value="Calculate" id="btnCalculate">
+                    </div>
+                    <div class="field">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td id="tdBasic">[basic]</td>
+                                    <td id="tdHra">[hra]</td>
+                                    <td id="tdDa">[da]</td>
+                                    <td id="tdTax">[tax]</td>
+                                    <td id="tdSalary">[Salary]</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            `;
+
+            var $viewEle = this.$viewEle = $('<div></div>');
+
+            this.render = function(){
+                $viewEle.html(_template);
+            }
+
+            //Reacting to user actions
+            $viewEle.on('keyup', '#txtBasic', function () {
+                model.set('basic', $(this).val().toInt());
+            });
+
+            $viewEle.on('keyup', '#txtHra', function () {
+                model.set('hra', $(this).val().toInt());
+            });
+
+            $viewEle.on('keyup', '#txtDa', function () {
+                model.set('da', $(this).val().toInt());
+            });
+
+            $viewEle.on('change', '#rangeTax', function () {
+                model.set('tax', $(this).val().toInt());
+            });
+
+            $viewEle.on('click', '#btnCalculate', function () {
+                model.calculate();
+            });
+
+            //Reacting to model changes
+            model.subscribe('salary', function (value) {
+                $('#tdSalary', $viewEle).text(value);
+            });
+
+            model.subscribe('basic', function (value) {
+                $('#tdBasic', $viewEle).text(value);
+            });
+
+            model.subscribe('hra', function (value) {
+                $('#tdHra', $viewEle).text(value);
+            });
+
+            model.subscribe('da', function (value) {
+                $('#tdDa', $viewEle).text(value);
+            });
+
+            model.subscribe('tax', function (value) {
+                $('#tdTax', $viewEle).text(value);
+            });
+        }
+
+        
+         /* $(function(){
+            var model = new SalaryCalculatorModel()
+            var view1 = new SalaryCalculator(model)
+            var view2 = new SalaryCalculator(model)
+            view1.$viewEle.appendTo(document.body)
+            view2.$viewEle.appendTo(document.body)
+            view1.render()
+            view2.render()
+            model.set('tax', 5)
+            model.calculate(); 
+        }); */
+    
+    </script>
+</head>
+<body>
+    <h1>Salary Calculator</h1>
+    <hr>
+    
+</body>
+</html>
