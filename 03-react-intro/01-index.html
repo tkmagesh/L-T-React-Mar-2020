@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>React Intro</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script>
+        window.addEventListener('load', onLoad);
+        function onLoad(){
+            var btnRender = document.getElementById('btnRender');
+            btnRender.addEventListener('click', onBtnRenderClick);
+        }
+
+        var counter = 0;
+        function onBtnRenderClick(){
+            ++counter;
+            document.getElementById('spanCounter').innerText = counter;
+            var h1Ele = React.createElement('h1', { id: 'heading-1' }, 'Welcome to React.js! - ' + counter);
+            ReactDOM.render(h1Ele, document.getElementById('root'))
+        }
+    </script>
+</head>
+<body>
+    <input type="button" value="Render" id="btnRender">
+    <div>
+        <span>Counter :</span>
+        <span id="spanCounter">[0]</span>
+    </div>
+    <div id="root"></div>
+</body>
+</html>
