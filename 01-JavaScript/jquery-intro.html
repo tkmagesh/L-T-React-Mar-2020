@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>jQuery</title>
+    <script src="jquery-3.4.1.js"></script>
+    <script>
+       /*  (function(){
+            window.addEventListener('load', onLoad);
+            function onLoad(){
+                var btnGreet = document.getElementById('btnGreet');
+                btnGreet.addEventListener('click', onBtnGreetClick);
+            }
+            function onBtnGreetClick(){
+                var txtUserName = document.getElementById('txtUserName');
+                var userName = txtUserName.value,
+                    greetMessage = 'Hi ' + userName + ', Have a nice day!',
+                    divMessage = document.getElementById('divMessage');
+                divMessage.innerText = greetMessage;
+            }
+        })(); */
+
+        
+        $(function() {
+            $('#btnGreet').click(function() {
+                var userName = $('#txtUserName').val(),
+                    greetMessage = 'Hi ' + userName + ', Have a nice day!';
+                $('#divMessage').text(greetMessage);
+            });
+        });
+        
+    </script>
+</head>
+<body>
+    <h1>Greeter</h1>
+    <hr>
+    <label for="">User Name :</label>
+    <input type="text" name="" id="txtUserName">
+    <input type="button" value="Greet" id="btnGreet">
+    <div id="divMessage">[Greet Message]</div>
+</body>
+</html>
