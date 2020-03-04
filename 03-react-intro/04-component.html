@@ -39,8 +39,16 @@
                         <label htmlFor="">User Name :</label>
                         <input type="text" name="" id="txtUserName" onChange={this.onTxtUserNameChange}/>
                         <input type="button" value="Greet" id="btnGreet" onClick={this.onBtnGreetClick} />
-                        <div id="divMessage" className="highlight">{this.state.greetMsg}</div>
+                        <GreeterMessage data={this.state.greetMsg}/>
                     </div>
+                )
+            }
+        }
+
+        class GreeterMessage extends React.Component{
+            render = () => {
+                return(
+                    <div id="divMessage" className="highlight">{this.props.data}</div>
                 )
             }
         }
