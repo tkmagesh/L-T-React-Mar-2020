@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Component Intro</title>
+    <style>
+        .highlight{
+            font-size: 18pt;
+            color : blueviolet;
+        }
+    </style>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="babel.min.js"></script>
+    <script type="text/babel">
+        class Greeter extends React.Component{
+            
+            state = { 
+                greetMsg : '[Default Greet Message]',
+                userName : ''
+            } ;
+
+            onBtnGreetClick = () => {
+                this.setState({greetMsg : `Hi ${this.state.userName}, ${this.props.greetTemplate}`});
+            }
+
+            onTxtUserNameChange = (evt) => {
+                const userName = evt.target.value;
+                this.setState({userName : userName});
+            }
+
+            render = () => {                
+                return (
+                    <div>
+                        <h1>Greeter</h1>
+                        <hr/>
+                        <label htmlFor="">User Name :</label>
+                        <input type="text" name="" id="txtUserName" onChange={this.onTxtUserNameChange}/>
+                        <input type="button" value="Greet" id="btnGreet" onClick={this.onBtnGreetClick} />
+                        <div id="divMessage" className="highlight">{this.state.greetMsg}</div>
+                    </div>
+                )
+            }
+        }
+
+        const greetTemplate = "Have a nice day!";
+        ReactDOM.render(
+            <div>
+                <Greeter greetTemplate={greetTemplate} />,
+                <hr/>
+                <Greeter greetTemplate="Have a good day!" />
+            </div>,
+            document.getElementById('root'));
+    </script>
+</head>
+<body>
+    <div id="root">
+
+
+    </div>
+</body>
+</html>
