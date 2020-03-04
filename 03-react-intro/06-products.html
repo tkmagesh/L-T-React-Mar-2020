@@ -10,23 +10,30 @@
     <script src="babel.min.js"></script>
     <script type="text/babel">
         class Products extends React.Component{
+            state = { 
+                productNames : [],
+                newProductName : ''
+            };
+
+            onTxtProductChange = (evt) => {
+                this.setState({newProductName : evt.target.value });
+            }
+
+            onAddNewClick = () => {
+                const { productNames, newProductName } = this.state;
+                productNames.push(newProductName);
+                this.setState({ productNames : productNames });
+            }
             render = () => {
-                const productNames = [ ];
-                /* const productItems = [];
-                for (let index = 0; index < productNames.length; index++) {
-                    const productName = productNames[index];
-                    const productItem = (<li key={index}>{productName}</li>);
-                    productItems.push(productItem);
-                } */
-                const productItems = productNames.map( (productName, index) => (<li key={index}>{productName}</li>));
+                const productItems = this.state.productNames.map( (productName, index) => (<li key={index}>{productName}</li>));
 
                 return(
                     <div>
                         <h1>Products</h1>
                         <hr/>
                         <label htmlFor="">Product Name :</label>
-                        <input type="text" name="" id="" />
-                        <input type="button" value="Add New" />
+                        <input type="text" onChange={this.onTxtProductChange} />
+                        <input type="button" value="Add New" onClick={this.onAddNewClick}/>
                         <ol>
                             {productItems}
                         </ol>
