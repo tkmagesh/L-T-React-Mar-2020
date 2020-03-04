@@ -82,7 +82,7 @@
         class SalaryCalculator extends React.Component{
             render = () => {
                 const { model } =  this.props,
-                    { basic, hra, da, tax, salary } = model.toJSON()
+                   data = model.toJSON()
                 return(
                     <section>
                         <div className="field">
@@ -104,7 +104,17 @@
                         <div className="field">
                             <input type="button" value="Calculate" onClick={ _ => model.calculate() }/>
                         </div>
-                        <div className="field">
+                        <SalaryCalculatorResult data={data}></SalaryCalculatorResult>
+                    </section>
+                )
+            }
+        }
+
+        class SalaryCalculatorResult extends React.Component{
+            render = () => {
+                const { basic, hra, da, tax, salary } = this.props.data;
+                return(
+                    <div className="field">
                             <table>
                                 <tbody>
                                     <tr>
@@ -117,7 +127,6 @@
                                 </tbody>
                             </table>
                         </div>
-                    </section>
                 )
             }
         }
