@@ -54,35 +54,67 @@
     </script>
     <script type="text/babel">
         function bugsReducer(currentState = [], action){
-            if (action.type='ADD_NEW_BUG'){
-                currentState.push(action.payload);
-                return currentState;
+            if (action.type === 'ADD_NEW_BUG'){
+               return [ ...currentState, action.payload ];
             }
-            console.log(currentState);
+            if (action.type === 'REPLACE_BUG'){
+                const bugToReplace = action.payload ;
+                return currentState.map(bug => bug.id == bugToReplace.id ? bugToReplace : bug) ;
+            }
             return currentState;
         }
 
+        let currentBugId = 0;
         const bugActionCreators = {
             addNew(newBugName){
-                const action = { type : 'ADD_NEW_BUG', payload : newBugName};
+                const newBug = { 
+                    id : ++currentBugId , 
+                    name : newBugName , 
+                    isClosed : false, 
+                    createdAt : new Date 
+                };
+                const action = { type : 'ADD_NEW_BUG', payload : newBug};
+                return action;
+            },
+            toggle(bugToToggle){
+                const toggledBug = { ...bugToToggle, isClosed : !bugToToggle.isClosed };
+                const action = { type : 'REPLACE_BUG', payload : toggledBug };
                 return action;
             }
         }
         const store = StateManager.createStore(bugsReducer);
+
         const bugActionDispatchers = StateManager.bindActionCreators(bugActionCreators, store.dispatch);
 
         class BugTracker extends React.Component{
             state = { newBugName : '' }
             render = () => {
-                const { bugs, addNew } = this.props,
-                    { newBugName } = this.state;
+                const { bugs, addNew, toggle } = this.props,
+                    { newBugName } = this.state,
+                    bugItems = bugs.map(bug => (
+                        {/* BugItem */}
+                        <li key={bug.id}>
+                            { bug.isClosed ?
+                                (<span className="bugname closed" onClick={_ => toggle(bug)}>
+                                    {bug.name}
+                                </span>) : (<span className="bugname" onClick={_ => toggle(bug)}>
+                                    {bug.name}
+                                </span>)
+                            }
+                            <div className="datetime">[{bug.createdAt.toString()}]</div>
+                            <div>{bug.isClosed.toString()}</div>
+                        </li>
+                    ));
                 return(
                     <>
+                        {/* BugStats */}
                         <section className="stats">
                             <span className="closed">1</span>
                             <span> / </span>
                             <span>{bugs.length}</span>
                         </section>
+
+                        {/* BugSort */}
                         <section className="sort">
                             <label htmlFor="">Order By :</label>
                             <select>
@@ -92,21 +124,18 @@
                             <label htmlFor="">Descending ? :</label>
                             <input type="checkbox" />
                         </section>
+
+                        {/*  BugEdit */}
                         <section className="edit">
                             <label htmlFor="">Bug Name :</label>
                             <input type="text" onChange={ evt => this.setState({newBugName : evt.target.value})} />
                             <input type="button" value="Add New" onClick={ _ => addNew(newBugName) }/>
                         </section>
+                        
+                        {/* BugList */}
                         <section className="list">
                             <ol>
-                                <li>
-                                    <span className="bugname">[This is bug - 1]</span>
-                                    <div className="datetime">[Created At]</div>
-                                </li>
-                                <li>
-                                    <span className="bugname closed">[This is bug - 2]</span>
-                                    <div className="datetime">[Created At]</div>
-                                </li>
+                                {bugItems}
                             </ol>
                             <input type="button" value="Remove Closed" />
                         </section>
