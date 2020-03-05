@@ -23,7 +23,8 @@
         /* Converting the actions into an object and Introducing the action creators */
         /* Simplifying the passing action creators to the component */
         /* Introducing spinnerActionDispatchers (using the bindActionCreators function) */
-
+        /* generalized the creation of actionDispatchers in the bindActionCreators function */
+        
         var spinnerActionCreators = {
             up(){
                 return { type : 'UP' };
@@ -36,7 +37,7 @@
             }
         };
 
-        function bindActionCreators(spinnerActionCreators, dispatch){
+        /* function bindActionCreators(spinnerActionCreators, dispatch){
             const spinnerActionDispatchers = {
                 up(){
                     const action = spinnerActionCreators.up();
@@ -48,6 +49,17 @@
                 }
             }
             return spinnerActionDispatchers;
+        } */
+
+        function bindActionCreators(actionCreators, dispatch){
+            const actionDispatchers = {};
+            for(let key in actionCreators){
+                actionDispatchers[key] = function(...args){
+                    const action = actionCreators[key](...args);
+                    dispatch(action);
+                }
+            }
+            return actionDispatchers;
         }
 
         class Spinner extends React.Component{
