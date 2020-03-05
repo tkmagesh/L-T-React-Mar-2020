@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>State Manager</title>
+    <script src="redux.js"></script>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="babel.min.js"></script>
+    <script type="text/babel">
+        function spinnerReducer(currentState = 0, action){
+            if (action.type === 'UP') return currentState + action.payload;
+            if (action.type === 'DOWN') return currentState - action.payload;
+            if (action.type === 'DOUBLE_UP') return currentState * 2;
+            if (action.type === 'DOUBLE_DOWN') return currentState / 2;
+            return currentState;
+        }
+
+        var store = Redux.createStore(spinnerReducer);
+
+        /* Removed the dependency on the store in the component */
+        /* Converting the actions into an object and Introducing the action creators */
+        /* Simplifying the passing action creators to the component */
+        /* Introducing spinnerActionDispatchers (using the bindActionCreators function) */
+        /* generalized the creation of actionDispatchers in the bindActionCreators function */
+        /* refactoring the bindActionCreators function to StateManager.js */
+        /* replacing StateManager with redux */
+        /* Converting the Spinner class into a Higher Order Component */
+        /* Handling payloads */
+        /* Managing State using useState hook */
+
+        var spinnerActionCreators = {
+            up(delta = 1){
+                return { type : 'UP', payload : delta };
+            },
+            down(delta = 1){
+                return { type : 'DOWN', payload : delta };
+            },
+            doubleUp(){
+                return { type : 'DOUBLE_UP'}
+            },
+            doubleDown(){
+                return { type : 'DOUBLE_DOWN'}
+            }
+        };
+        
+        /*  class Spinner extends React.Component{
+            state = { delta : 0 };
+            render = () => {
+                const { value,up, down, doubleUp, doubleDown } = this.props,
+                    { delta } = this.state;
+                return(
+                    <div>
+                        <label>Delta : </label>
+                        <input type="number" value={delta || 0} onChange={evt => this.setState({delta : evt.target.valueAsNumber})} />
+                        <br/>
+                        <input type="button" value="DOUBLE DOWN" onClick={doubleDown} />
+                        <input type="button" value="DOWN" onClick={ _ => down(delta)}/>
+                        <span> [ {value} ] </span>
+                        <input type="button" value="UP" onClick={ _ => up(delta)}/>
+                        <input type="button" value="DOUBLE UP" onClick={doubleUp} />
+                    </div>
+                 )
+            }
+        }  */
+
+         const Spinner = ({value, up, down, doubleUp, doubleDown}) => {
+            const [ delta, setDelta ] = React.useState(0);
+            return (
+                <div>
+                    <label>Delta : </label>
+                    <input type="number" value={delta || 0} onChange={ evt => setDelta(evt.target.valueAsNumber)} />
+                    <br/>
+                    <input type="button" value="DOUBLE DOWN" onClick={doubleDown} />
+                    <input type="button" value="DOWN" onClick={ _ => down(delta) }/>
+                    <span> [ {value} ] </span>
+                    <input type="button" value="UP" onClick={ _ => up(delta) }/>
+                    <input type="button" value="DOUBLE UP" onClick={doubleUp} />
+                </div>
+            )
+        };
+
+        const spinnerActionDispatchers = Redux.bindActionCreators(spinnerActionCreators, store.dispatch);
+
+        function renderApp(){
+            const value = store.getState();
+            ReactDOM.render(<Spinner value={value} {...spinnerActionDispatchers} />,
+                document.getElementById('root'));
+        }
+        renderApp();
+        store.subscribe(renderApp);
+    </script>
+</head>
+<body>
+    <div id="root">
+
+
+    </div>
+</body>
+</html>
