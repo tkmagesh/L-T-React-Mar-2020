@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Bug Tracker</title>
+    <script src="stateManager.js"></script>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="babel.min.js"></script>
+    <style>
+        body{
+            margin-left: 50px;
+        }
+        section{
+            margin-bottom: 10px;
+        }
+        .stats, .bugname{
+            font-size: 18pt;
+        }
+        .closed{
+            color : red;
+            text-decoration: line-through;
+            font-style: italic;
+            font-weight: bold;
+        }
+        .bugname{
+            cursor: pointer;
+        }
+        ol{
+            width: 500px;
+            list-style: none;
+            -webkit-padding-start: 0px;
+        }
+        li{
+            padding : 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border : 2px solid gray;
+            background-color: #e7e7e7;
+        }
+    </style>
+    <script type="text/usecases">
+        1. Add new bugs
+        2. List the added bugs
+        3. Toggle the 'closed' status of any bug
+        4. Remove 'closed' bugs
+        5. Display Stats ( # of closed bugs / total # of bugs )
+        6. Sort the bugs (homework)
+        7. Persist the bugs in the server
+        8. Make the bugs accessible using unique urls
+        9. Prepare the application for deployment
+    </script>
+    <script type="text/babel">
+        class BugTracker extends React.Component{
+            render = () => {
+                return(
+                    <>
+                        <section className="stats">
+                            <span className="closed">1</span>
+                            <span> / </span>
+                            <span>2</span>
+                        </section>
+                        <section className="sort">
+                            <label htmlFor="">Order By :</label>
+                            <select>
+                                <option value=""></option>
+                                <option value=""></option>
+                            </select>
+                            <label htmlFor="">Descending ? :</label>
+                            <input type="checkbox" />
+                        </section>
+                        <section className="edit">
+                            <label htmlFor="">Bug Name :</label>
+                            <input type="text" />
+                            <input type="button" value="Add New" />
+                        </section>
+                        <section className="list">
+                            <ol>
+                                <li>
+                                    <span className="bugname">[This is bug - 1]</span>
+                                    <div className="datetime">[Created At]</div>
+                                </li>
+                                <li>
+                                    <span className="bugname closed">[This is bug - 2]</span>
+                                    <div className="datetime">[Created At]</div>
+                                </li>
+                            </ol>
+                            <input type="button" value="Remove Closed" />
+                        </section>
+                    </>
+                )
+            }
+        }
+
+        ReactDOM.render(<BugTracker/>,
+            document.getElementById('root'));
+    </script>
+</head>
+<body>
+    <h1>Bug Tracker</h1>
+    <hr>
+   <div id="root">
+
+   </div>
+</body>
+</html>
