@@ -53,14 +53,35 @@
         9. Prepare the application for deployment
     </script>
     <script type="text/babel">
+        function bugsReducer(currentState = [], action){
+            if (action.type='ADD_NEW_BUG'){
+                currentState.push(action.payload);
+                return currentState;
+            }
+            console.log(currentState);
+            return currentState;
+        }
+
+        const bugActionCreators = {
+            addNew(newBugName){
+                const action = { type : 'ADD_NEW_BUG', payload : newBugName};
+                return action;
+            }
+        }
+        const store = StateManager.createStore(bugsReducer);
+        const bugActionDispatchers = StateManager.bindActionCreators(bugActionCreators, store.dispatch);
+
         class BugTracker extends React.Component{
+            state = { newBugName : '' }
             render = () => {
+                const { bugs, addNew } = this.props,
+                    { newBugName } = this.state;
                 return(
                     <>
                         <section className="stats">
                             <span className="closed">1</span>
                             <span> / </span>
-                            <span>2</span>
+                            <span>{bugs.length}</span>
                         </section>
                         <section className="sort">
                             <label htmlFor="">Order By :</label>
@@ -73,8 +94,8 @@
                         </section>
                         <section className="edit">
                             <label htmlFor="">Bug Name :</label>
-                            <input type="text" />
-                            <input type="button" value="Add New" />
+                            <input type="text" onChange={ evt => this.setState({newBugName : evt.target.value})} />
+                            <input type="button" value="Add New" onClick={ _ => addNew(newBugName) }/>
                         </section>
                         <section className="list">
                             <ol>
@@ -94,8 +115,13 @@
             }
         }
 
-        ReactDOM.render(<BugTracker/>,
-            document.getElementById('root'));
+        function renderApp(){
+            const bugs = store.getState();
+            ReactDOM.render(<BugTracker bugs={bugs} {...bugActionDispatchers }/>,
+                document.getElementById('root'));
+        }
+        renderApp();
+        store.subscribe(renderApp);
     </script>
 </head>
 <body>

@@ -2,7 +2,7 @@ var StateManager = (function(){
     var _currentState = undefined,
         _subscribers = [],
         _reducer = undefined,
-        __init_action = '@@INIT/ACTION';
+        __init_action = { type : '@@INIT/ACTION' };
 
     function getState(){
         return _currentState;
