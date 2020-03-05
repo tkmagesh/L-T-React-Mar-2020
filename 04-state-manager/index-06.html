@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>State Manager</title>
+    <script src="stateManager.js"></script>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="babel.min.js"></script>
+    <script type="text/babel">
+        function spinnerReducer(currentState = 0, action){
+            if (action.type === 'UP') return ++currentState;
+            if (action.type === 'DOWN') return --currentState;
+            if (action.type === 'DOUBLE_UP') return currentState * 2;
+            return currentState;
+        }
+
+        var store = StateManager.createStore(spinnerReducer);
+
+        /* Removed the dependency on the store in the component */
+        /* Converting the actions into an object and Introducing the action creators */
+        /* Simplifying the passing action creators to the component */
+        /* Introducing spinnerActionDispatchers (using the bindActionCreators function) */
+
+        var spinnerActionCreators = {
+            up(){
+                return { type : 'UP' };
+            },
+            down(){
+                return { type : 'DOWN'}
+            },
+            doubleUp(){
+                return { type : 'DOUBLE_UP'}
+            }
+        };
+
+        function bindActionCreators(spinnerActionCreators, dispatch){
+            const spinnerActionDispatchers = {
+                up(){
+                    const action = spinnerActionCreators.up();
+                    dispatch(action);
+                },
+                down(){
+                    const action = spinnerActionCreators.down();
+                    dispatch(action);
+                }
+            }
+            return spinnerActionDispatchers;
+        }
+
+        class Spinner extends React.Component{
+            onDownClick = () => {
+                this.props.down();
+            }
+            onUpClick = () => {
+                this.props.up();
+            }
+            onDoubleUpClick = () => {
+                this.props.doubleUp();
+            }
+            render = () => {
+                const { value, dispatch } = this.props;
+                return(
+                    <div>
+                        <input type="button" value="DOWN" onClick={this.onDownClick}/>
+                        <span> [ {value} ] </span>
+                        <input type="button" value="UP" onClick={this.onUpClick}/>
+                        <input type="button" value="DOUBLE UP" onClick={this.onDoubleUpClick} />
+                    </div>
+                 )
+            }
+        }
+
+        const spinnerActionDispatchers = bindActionCreators(spinnerActionCreators, store.dispatch);
+
+        function renderApp(){
+            const value = store.getState();
+            ReactDOM.render(<Spinner value={value} {...spinnerActionDispatchers} />,
+                document.getElementById('root'));
+        }
+        renderApp();
+        store.subscribe(renderApp);
+    </script>
+</head>
+<body>
+    <div id="root">
+
+
+    </div>
+</body>
+</html>
