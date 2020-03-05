@@ -100,7 +100,14 @@
                         <SalaryCalculatorInput labelText="Basic : " onValueChange={ value => model.set('basic', value)}/>
                         <SalaryCalculatorInput labelText="HRA : " onValueChange={ value => model.set('hra', value)}/>
                         <SalaryCalculatorInput labelText="DA : " onValueChange={ value => model.set('da', value)}/>
-                        <SalaryCalculatorInput labelText="Tax : " type="range" onValueChange={ value => model.set('tax', value)} min="0" max="30" defaultValue="0"/>
+                        <SalaryCalculatorInput 
+                            labelText="Tax : " 
+                            type="range" 
+                            onValueChange={ value => model.set('tax', value)} 
+                            min="0" 
+                            max="30" 
+                            defaultValue="0"
+                        />
                         <div className="field">
                             <input type="button" value="Calculate" onClick={ _ => model.calculate() }/>
                         </div>
