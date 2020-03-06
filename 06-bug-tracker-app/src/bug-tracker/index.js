@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import BugStats from './views/bugStats';
 import BugSort from './views/bugSort';
 import BugEdit from './views/bugEdit';
 import BugList from './views/bugList';
 import './index.css';
+import bugActionCreators from './actions';
 
 class BugTracker extends Component {
     render = () => {
@@ -21,4 +23,14 @@ class BugTracker extends Component {
     }
 }
 
-export default BugTracker;
+function mapStateToProps(storeState){
+    const bugs = storeState.bugsData;
+    return { bugs : bugs };
+}
+function mapDispatchToProps(dispatch){
+    const bugActionDispatchers = bindActionCreators(bugActionCreators, dispatch);
+    return bugActionDispatchers;
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BugTracker);

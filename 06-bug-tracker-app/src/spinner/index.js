@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import spinnerActionCreators from './actions';
 
 const Spinner = ({ value, up, down, doubleUp, doubleDown }) => {
     const [delta, setDelta] = React.useState(0);
@@ -16,4 +18,19 @@ const Spinner = ({ value, up, down, doubleUp, doubleDown }) => {
     )
 };
 
-export default Spinner;
+//extract the data from storeState and pass the data as props to the component
+function mapStateToProps(storeState){
+    const value = storeState.spinnerData;
+    return { value : value };
+}
+
+//create action dispatchers
+function mapDispatchToProps(dispatch){
+    const spinnerActionDispatchers = bindActionCreators(spinnerActionCreators, dispatch);
+    return spinnerActionDispatchers;
+}
+
+export default connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )(Spinner);
