@@ -11,11 +11,12 @@ import bugActionCreators from './actions';
 
 class BugTracker extends Component {
     render = () => {
-        const { bugs, addNew, toggle, removeClosed } = this.props;
+        const { bugs, addNew, toggle, removeClosed, load } = this.props;
         return (
             <>
                 <h3>Bug Tracker</h3>
                 <hr/>
+                <input type="button" value="LOAD BUGS" onClick={load} />
                 <BugStats bugs={bugs} />
                 <BugSort />
                 <BugEdit addNew={addNew} />
@@ -26,8 +27,9 @@ class BugTracker extends Component {
 }
 
 function mapStateToProps(storeState){
-    const spinnerValue = storeState.spinnerData,
-        bugs = storeState.bugsData.filter(bug => bug.id % 2 === spinnerValue % 2);
+    /* const spinnerValue = storeState.spinnerData,
+        bugs = storeState.bugsData.filter(bug => bug.id % 2 === spinnerValue % 2); */
+    const bugs = storeState.bugsData;
     return { bugs : bugs };
 }
 function mapDispatchToProps(dispatch){

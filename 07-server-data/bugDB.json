@@ -1,11 +1,10 @@
 {
   "bugs": [
     {
-      "id": 4,
-      "name": "Bug - 4",
+      "id": 5,
+      "name": "Server communication failure",
       "isClosed": false,
-      "createdAt": "2019-11-21T08:06:47.293Z",
-      "desc": "Elit Lorem excepteur dolore qui tempor ut. Nostrud dolore aliqua ipsum minim officia Lorem anim magna consequat sint qui fugiat. Officia velit culpa nulla excepteur voluptate do aliquip voluptate. Voluptate consequat consectetur exercitation duis quis irure irure."
+      "createdAt": "2020-03-06T10:35:43.839Z"
     }
   ],
   "projects": [

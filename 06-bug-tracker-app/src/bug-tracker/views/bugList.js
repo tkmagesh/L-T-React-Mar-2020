@@ -9,7 +9,7 @@ const BugList = ({ bugs, toggle, removeClosed }) => {
             <ol>
                 {bugItems}
             </ol>
-            <input type="button" value="Remove Closed" onClick={_ => removeClosed(bugs)} />
+            <input type="button" value="Remove Closed" onClick={_ => removeClosed()} />
         </section>
     )
 }
