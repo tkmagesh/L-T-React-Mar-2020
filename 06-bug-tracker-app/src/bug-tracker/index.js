@@ -26,7 +26,8 @@ class BugTracker extends Component {
 }
 
 function mapStateToProps(storeState){
-    const bugs = storeState.bugsData;
+    const spinnerValue = storeState.spinnerData,
+        bugs = storeState.bugsData.filter(bug => bug.id % 2 === spinnerValue % 2);
     return { bugs : bugs };
 }
 function mapDispatchToProps(dispatch){
