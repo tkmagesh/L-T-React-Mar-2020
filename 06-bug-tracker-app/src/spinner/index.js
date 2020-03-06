@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import spinnerActionCreators from './actions';
+import { bindActionCreators } from 'redux';
 
 const Spinner = ({ value, up, down, doubleUp, doubleDown }) => {
     const [delta, setDelta] = React.useState(0);

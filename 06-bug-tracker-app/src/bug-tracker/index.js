@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
 import BugStats from './views/bugStats';
 import BugSort from './views/bugSort';
 import BugEdit from './views/bugEdit';
