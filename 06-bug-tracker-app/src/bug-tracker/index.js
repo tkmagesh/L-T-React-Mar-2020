@@ -10,13 +10,16 @@ import './index.css';
 import bugActionCreators from './actions';
 
 class BugTracker extends Component {
+    componentDidMount =() => {
+        this.props.load();
+    }
     render = () => {
         const { bugs, addNew, toggle, removeClosed, load } = this.props;
         return (
             <>
                 <h3>Bug Tracker</h3>
                 <hr/>
-                <input type="button" value="LOAD BUGS" onClick={load} />
+                {/* <input type="button" value="LOAD BUGS" onClick={load} /> */}
                 <BugStats bugs={bugs} />
                 <BugSort />
                 <BugEdit addNew={addNew} />
